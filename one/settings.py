@@ -39,6 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user.apps.UserConfig',
     'stock.apps.StockConfig',
+    'import_export',
+    # 添加分布式任务
+    'django_celery_results',
+    # 添加定时任务
+    'django_celery_beat',
+
 ]
 
 MIDDLEWARE = [
@@ -131,3 +137,14 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/usr/local/var/www/one_static'
 
 AUTH_USER_MODEL = 'user.User'
+
+# 设置存储Celery任务队列的Redis数据库
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+# 设置存储任务结果的数据仓库
+CELERY_RESULT_BACKEND = 'django-db'
+
+# 设置定时任务相关配置
+CELERY_ENABLE_UTC = False
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
